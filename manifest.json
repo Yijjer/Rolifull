@@ -1,0 +1,103 @@
+{
+  "manifest_version": 3,
+  "name": "rroliful",
+  "version": "1.0",
+
+  "permissions": [
+    "storage"
+  ],
+
+  "host_permissions": [
+    "https://api.rolimons.com/*",
+    "https://www.rolimons.com/*",
+    "https://inventory.roblox.com/*",
+    "https://thumbnails.roblox.com/*",
+    "https://users.roblox.com/*",
+    "https://friends.roblox.com/*",
+    "https://trades.roblox.com/*",
+    "https://groups.roblox.com/*",
+    "https://economy.roblox.com/*",
+    "https://catalog.roblox.com/*",
+    "https://apis.roblox.com/*",
+    "https://routility.io/*",
+    "https://api.ropro.io/*"
+  ],
+
+  "background": {
+    "service_worker": "content/background.js"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "rolibadges/*.svg",
+        "icon/*.png",
+        "icon/*.svg",
+        "serialiseditems.json"
+      ],
+      "matches": [
+        "https://www.rolimons.com/*"
+      ]
+    }
+  ],
+
+    "content_scripts": [
+      {
+        "matches": [
+          "https://www.rolimons.com/trades*"
+        ],
+        "js": [
+          "content/content.js"
+        ],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": [
+          "https://www.rolimons.com/player/*"
+        ],
+        "js": [
+          "content/profile.js"
+        ],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": [
+          "https://www.rolimons.com/deals*"
+        ],
+        "css": [
+          "styles/deals.css"
+        ],
+        "js": [
+          "content/dealspage.js"
+        ],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": [
+          "https://www.rolimons.com/item/*"
+        ],
+        "js": [
+          "content/item.js"
+        ],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": [
+          "https://www.rolimons.com/tradesettings*"
+        ],
+        "js": [
+          "content/tradesettings.js"
+        ],
+        "run_at": "document_idle"
+      },
+      {
+        "matches": [
+          "https://www.rolimons.com/tradecalculator*"
+        ],
+        "js": [
+          "content/tradecalc.js"
+        ],
+        "run_at": "document_idle"
+      }
+  ]
+}
