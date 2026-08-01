@@ -1,4 +1,4 @@
-console.log("[Rolijoy] Deals page script loaded");
+console.log("[Roliful] Deals page script loaded");
 
 (() => {
     let enabled = false;
@@ -300,7 +300,7 @@ console.log("[Rolijoy] Deals page script loaded");
     /* ── Serial badge ── */
 
     :root {
-        --rolijoy-serial-color: #7ec8e3;
+        --roliful-serial-color: #7ec8e3;
     }
 
     .joyful-serial-badge {
@@ -311,7 +311,7 @@ console.log("[Rolijoy] Deals page script loaded");
         border: 1px solid #555;
         border-radius: 6px;
         padding: 2px 6px;
-        color: var(--rolijoy-serial-color);
+        color: var(--roliful-serial-color);
         font-size: 11px;
         font-weight: 600;
         font-family: sans-serif;
@@ -370,7 +370,7 @@ console.log("[Rolijoy] Deals page script loaded");
 
         toolbar.innerHTML = `
             <h3 id="joyful-toolbar-header">
-                <span>Rolijoy Tools</span>
+                <span>Roliful Tools</span>
                 <span id="joyful-collapse-icon">▲</span>
             </h3>
 
@@ -477,7 +477,7 @@ console.log("[Rolijoy] Deals page script loaded");
             enabled = dynamicToggle.checked;
             if (!enabled) {
                 // When disabling, remove the class from ALL cards immediately
-                console.log('[Rolijoy] Hiding disabled — clearing all hidden-face classes');
+                console.log('[Roliful] Hiding disabled — clearing all hidden-face classes');
                 document.querySelectorAll('.joyful-hidden-face').forEach(el => {
                     el.classList.remove('joyful-hidden-face');
                 });
@@ -492,15 +492,15 @@ console.log("[Rolijoy] Deals page script loaded");
             serialsEnabled = serialToggle.checked;
             const counter = document.getElementById("joyful-serial-count");
             if (serialsEnabled) {
-                console.log("[Rolijoy] Serials enabled — scanning deals");
+                console.log("[Roliful] Serials enabled — scanning deals");
                 counter.textContent = "scanning...";
                 scanDeals();
             } else {
-                console.log("[Rolijoy] Serials disabled — removing badges");
+                console.log("[Roliful] Serials disabled — removing badges");
                 counter.textContent = "off";
                 document.querySelectorAll('.joyful-serial-badge').forEach(b => b.remove());
-                document.querySelectorAll('[data-rolijoy-serial-done]').forEach(el => {
-                    delete el.dataset.rolijoySerialDone;
+                document.querySelectorAll('[data-roliful-serial-done]').forEach(el => {
+                    delete el.dataset.rolifulSerialDone;
                 });
             }
         };
@@ -511,9 +511,9 @@ console.log("[Rolijoy] Deals page script loaded");
         serialItemsToggle.onchange = () => {
             serialItemsOnly = serialItemsToggle.checked;
             if (serialItemsOnly) {
-                console.log("[Rolijoy] Serial items only enabled");
+                console.log("[Roliful] Serial items only enabled");
             } else {
-                console.log("[Rolijoy] Serial items only disabled — clearing filter");
+                console.log("[Roliful] Serial items only disabled — clearing filter");
                 document.querySelectorAll('.joyful-non-serial').forEach(el => {
                     el.classList.remove('joyful-non-serial');
                 });
@@ -526,7 +526,7 @@ console.log("[Rolijoy] Deals page script loaded");
         const serialColorHex = document.getElementById("joyful-serial-color-hex");
 
         function applySerialColor(hex) {
-            document.documentElement.style.setProperty('--rolijoy-serial-color', hex);
+            document.documentElement.style.setProperty('--roliful-serial-color', hex);
             serialColorHex.textContent = hex;
             serialColorBtn.style.borderColor = hex;
         }
@@ -736,7 +736,7 @@ console.log("[Rolijoy] Deals page script loaded");
         const counter = document.getElementById("joyful-hidden-count");
         if (!counter) return;
         const count = document.querySelectorAll(
-            '.mix_item[data-rolijoy-dynamic-face="true"]'
+            '.mix_item[data-roliful-dynamic-face="true"]'
         ).length;
         counter.textContent = `${count} available`;
     }
@@ -810,7 +810,7 @@ console.log("[Rolijoy] Deals page script loaded");
                 }
             }
             if (type === "bundles" && checkedAssets.has("dyn_" + id)) {
-                deal.dataset.rolijoyDynamicFace = "true";
+                deal.dataset.rolifulDynamicFace = "true";
                 deal.classList.toggle('joyful-hidden-face', enabled);
             } else if (type === "bundles") {
                 // Ensure non-dynamic bundles don't have the class
@@ -825,10 +825,10 @@ console.log("[Rolijoy] Deals page script loaded");
                 deal.classList.remove('joyful-non-serial');
             }
 
-            if (serialsEnabled && !deal.dataset.rolijoySerialDone) {
+            if (serialsEnabled && !deal.dataset.rolifulSerialDone) {
                 // Only queue items that are in the serialised list
                 if (type === "catalog" && serialisedItems && !serialisedItems.has(id)) {
-                    deal.dataset.rolijoySerialDone = "skip";
+                    deal.dataset.rolifulSerialDone = "skip";
                     continue;
                 }
                 serialQueue.push({ deal, type, id });
@@ -837,22 +837,22 @@ console.log("[Rolijoy] Deals page script loaded");
 
         // Parallel serial fetching
         if (serialsEnabled && serialQueue.length > 0) {
-            const skipped = document.querySelectorAll('[data-rolijoy-serial-done="skip"]').length;
-            console.log(`[Rolijoy] Fetching serials for ${serialQueue.length} deals (${skipped} skipped — not serialised)`);
+            const skipped = document.querySelectorAll('[data-roliful-serial-done="skip"]').length;
+            console.log(`[Roliful] Fetching serials for ${serialQueue.length} deals (${skipped} skipped — not serialised)`);
             let fetched = 0;
 
             for (let i = 0; i < serialQueue.length; i += SERIAL_CONCURRENCY) {
                 const batch = serialQueue.slice(i, i + SERIAL_CONCURRENCY);
                 const results = await Promise.allSettled(
                     batch.map(async ({ deal, type, id }) => {
-                        deal.dataset.rolijoySerialDone = "1";
+                        deal.dataset.rolifulSerialDone = "1";
                         const serial = await fetchDealSerial(type, id);
                         if (serial != null) {
                             addSerialBadge(deal, serial);
                             fetched++;
-                            console.log(`[Rolijoy] Serial for ${type}/${id}: #${serial}`);
+                            console.log(`[Roliful] Serial for ${type}/${id}: #${serial}`);
                         } else {
-                            console.log(`[Rolijoy] No serial found for ${type}/${id}`);
+                            console.log(`[Roliful] No serial found for ${type}/${id}`);
                         }
                     })
                 );
@@ -860,7 +860,7 @@ console.log("[Rolijoy] Deals page script loaded");
 
             const counter = document.getElementById("joyful-serial-count");
             if (counter) counter.textContent = `${fetched} shown`;
-            console.log(`[Rolijoy] Serial scan complete — ${fetched}/${serialQueue.length} resolved`);
+            console.log(`[Roliful] Serial scan complete — ${fetched}/${serialQueue.length} resolved`);
         }
 
         scanRunning = false;
@@ -881,7 +881,7 @@ console.log("[Rolijoy] Deals page script loaded");
 
         // Listen for MixItUp filter changes (survives filter dropdown changes)
         document.addEventListener('mixEnd', () => {
-            console.log('[Rolijoy] Filter changed — rescanning...');
+            console.log('[Roliful] Filter changed — rescanning...');
             clearTimeout(scanTimeout);
             scanTimeout = setTimeout(() => scanDeals(), 500);
         });
@@ -896,9 +896,9 @@ console.log("[Rolijoy] Deals page script loaded");
             const resp = await fetch(url);
             const arr = await resp.json();
             serialisedItems = new Set(arr);
-            console.log(`[Rolijoy] Loaded serialised items list: ${serialisedItems.size} items`);
+            console.log(`[Roliful] Loaded serialised items list: ${serialisedItems.size} items`);
         } catch (e) {
-            console.log('[Rolijoy] Failed to load serialiseditems.json:', e);
+            console.log('[Roliful] Failed to load serialiseditems.json:', e);
             serialisedItems = null;
         }
 

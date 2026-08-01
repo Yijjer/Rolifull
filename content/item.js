@@ -105,7 +105,7 @@ function injectItemToolbar() {
 
     toolbar.innerHTML = `
         <h3 id="joyful-item-toolbar-header">
-            <span>Rolijoy Tools</span>
+            <span>Roliful Tools</span>
             <span id="joyful-item-collapse-icon">▲</span>
         </h3>
 
@@ -186,7 +186,7 @@ function injectMarketStats(itemId) {
     if (!wrapper) return;
 
     const col = document.createElement("div");
-    col.id = "rolijoy-market-col";
+    col.id = "roliful-market-col";
 
     let rowIndex = 0;
     const makeRow = (svg, label, value, tooltip) => {

@@ -1,4 +1,4 @@
-const DEBUG_PREFIX = "[Rolijoy]";
+const DEBUG_PREFIX = "[Roliful]";
 
 const profileMatch = location.pathname.match(/^\/player\/(\d+)/);
 if (!profileMatch) throw new Error("Not a player page");
@@ -1151,7 +1151,7 @@ function injectPlayerToolbar() {
 
     toolbar.innerHTML = `
         <h3 id="joyful-player-toolbar-header">
-            <span>Rolijoy Tools</span>
+            <span>Roliful Tools</span>
             <span id="joyful-player-collapse-icon">▲</span>
         </h3>
 
@@ -1244,6 +1244,7 @@ function injectPlayerToolbar() {
 
             <div class="joyful-player-footer">
                 <span>v1.0.0</span>
+                <a href="https://discord.gg/NpwDMxdem" target="_blank" style="color:#7289da;text-decoration:none;font-size:11px;">Discord</a>
             </div>
 
         </div>
@@ -1582,7 +1583,7 @@ function markRareSerials() {
         .item_card_img_container {
             position: relative;
         }
-        .rolijoy-rare-star {
+        .roliful-rare-star {
             position: absolute;
             top: 4px;
             left: 4px;
@@ -1603,7 +1604,7 @@ function markRareSerials() {
             const imgContainer = card.querySelector(".item_card_img_container");
             if (!imgContainer) continue;
 
-            const existingStar = imgContainer.querySelector(".rolijoy-rare-star");
+            const existingStar = imgContainer.querySelector(".roliful-rare-star");
             if (existingStar) continue;
 
             const serialSpan = card.querySelector(".text-warning.text-truncate");
@@ -1615,7 +1616,7 @@ function markRareSerials() {
             if (!RARE_SERIALS.isRare(parseInt(m[1], 10))) continue;
 
             const star = document.createElement("span");
-            star.className = "rolijoy-rare-star";
+            star.className = "roliful-rare-star";
             star.setAttribute("aria-hidden", "true");
             star.textContent = "⭐";
             imgContainer.appendChild(star);
@@ -1642,7 +1643,7 @@ function markRareSerials() {
     const observer = new MutationObserver((mutations) => {
         for (const mut of mutations) {
             for (const node of mut.addedNodes) {
-                if (node.nodeType === 1 && !node.classList?.contains("rolijoy-rare-star")) {
+                if (node.nodeType === 1 && !node.classList?.contains("roliful-rare-star")) {
                     rescanAll();
                     return;
                 }
